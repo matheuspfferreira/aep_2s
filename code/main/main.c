@@ -7,13 +7,18 @@
 #define CODIGO_CARACTERE_SUBSTITUTO 42
 
 // Declaração de procedimentos
-void menuInicial();
-void pularLinhas();
+void exibeMenuInicial();
+void exibeMenuCadastro();
+void pularLinhas(int quantidadeLinhas);
 void criptografaSenha(char* senhaResgatada);
 
 // Declaração de funções
 int resgataOpcao();
 int verificaIntegridadeSenha(char* senhaResgatada);
+int verificaUsuarioCadastrado(char* nomeUsuario);
+
+// Declaração de variáveis globais
+char nomesUsuario[200][15];
 
 // Execução do programa
 int main() {
@@ -25,7 +30,7 @@ int main() {
     while (continuarPrograma) {
 
         // Exibindo as opções
-        menuInicial();
+        exibeMenuInicial();
         opcaoEscolhida = resgataOpcao();
 
         // Direcionando o usuário
@@ -34,8 +39,26 @@ int main() {
             // Redirecionando o usuário
             switch (opcaoEscolhida) {
                 case 1:
-                    printf("Cadastro de usuario");
-                    break;
+
+                    // Exibindo o menu de cadastro
+                    exibeMenuCadastro();
+                    
+                    // Declaração de variáveis
+                    char novoNomeUsuario[30];
+                    int usuarioJaCadastrado;
+            
+                    // Entradas e saídas
+                    printf("Informe um nome de usuario (apelido): ");
+                    gets(novoNomeUsuario);
+                    usuarioJaCadastrado = verificaUsuarioCadastrado(novoNomeUsuario);
+
+                    // Verificando se o usuário já existe
+                    if (usuarioJaCadastrado) {
+                        printf("Ja existe um usuario cadastrado com esse nome");
+                    } else {
+                        printf("Usuario permitido");   
+                    } pularLinhas(QUANTIDADE_LINHAS_PULAR);
+
                 case 2:
                     printf("Alteracao de usuario");
                     break;
@@ -48,6 +71,7 @@ int main() {
                 default:
                     printf("Encerrando o programa");
                     continuarPrograma = 0;
+
             } pularLinhas(QUANTIDADE_LINHAS_PULAR);
             
         } else {
@@ -62,7 +86,7 @@ int main() {
 }
 
 // Inicialização de procedimentos
-void menuInicial() {
+void exibeMenuInicial() {
 
     // Mostrando as opções disponíveis
     printf("===== Menu Inicial ===== \n\n1. Cadastro de usuario\n2. Alteracao de usuario\n3. Exclusao de usuario\n4. Listagem de usuarios\n5. Sair\n\n");
@@ -103,6 +127,13 @@ void criptografaSenha(char* senhaResgatada) {
 
 }
 
+void exibeMenuCadastro() {
+
+    // Exibindo um menu para a tela de cadastro
+    printf("===== Novo Cadastro ===== \n\n");
+    
+}
+
 // Inicialização de funções
 int resgataOpcao() {
 
@@ -116,9 +147,31 @@ int resgataOpcao() {
     // Realizando a verificação
     if (opcao < 1 || opcao > 5) {
         return 0;
-    }
-    return opcao;
+    } return opcao;
 
+}
+
+int verificaUsuarioCadastrado(char* usuario) {
+
+    // Declaração de variáveis
+    int quantidadeUsuariosCadastrados, usuarioEncontrado; 
+
+    // Atribuições
+    quantidadeUsuariosCadastrados = sizeof(nomesUsuario) / sizeof(nomesUsuario[0]);
+
+    // Percorrendo o vetor de cadastro
+    for (int i = 0; i < quantidadeUsuariosCadastrados; i++) {
+
+        // Atribuições
+        usuarioEncontrado = strcmp(nomesUsuario[i], usuario) == 0;
+
+        // Realizando a verificação
+        if (usuarioEncontrado) {
+            return 1;
+        }
+
+    } return 0;
+    
 }
 
 int verificaIntegridadeSenha(char* senhaResgatada) {
